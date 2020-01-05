@@ -1,7 +1,8 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import './app-header.css';
 
-const AppHeader = ({toDo, done}) => {
+const AppHeader = ({ toDo, done }) => {
   return (
     <div className="app-header d-flex">
       <h1>Todo List</h1>
