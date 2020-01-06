@@ -4,7 +4,6 @@ import React from 'react';
 import './todo-list-item.css';
 
 class TodoListItem extends React.Component {
-
   render () {
     const {
       label, onDeleted,
