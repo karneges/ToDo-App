@@ -73,8 +73,9 @@ class App extends React.Component {
         };
       });
     };
-    this.onSearch = (text, filter = false) => {
-      if (!filter) {
+
+    this.onSearch = (text, filterState = false) => {
+      if (!filterState) {
         this.setState(({ term }) => {
           return {
             term: text
@@ -82,37 +83,61 @@ class App extends React.Component {
         });
       } else {
         this.setState((state) => {
-          console.log(filter);
-          ////Продолжить тут 
-          // return {
-          //   filter
-          // };
+          const newFilter = filterState.filter((item) => item.activ);
+          console.log(newFilter[0].label);
+          return {
+            filter: newFilter[0].label
+          };
         });
-      }
+      };
+
+      // console.log(this.state);
     };
 
-    this.Search = (items, term) => {
-      if (term.length === 0) {
-        return items;
+    this.Search = (items, term, filterState) => {
+      if (term.length === 0 ) {
+        return items && this.filtration(filterState, items);
       }
       return items.filter((item) => {
-        return item.label.indexOf(term) > -1;
+        return item.label.indexOf(term) > -1 &&
+         this.filtration(filterState, items);
       });
     };
+    this.filtration = (filterState, items) => {
+      switch (filterState) {
+        case 'All':return items;
+        case 'Active':return items.filter((i) => {
+          return !i.done;
+        });
+        case 'Done':return items.filter((i) => {
+          return i.done;
+        });
+        default : return items;
+      }
+    };
   };
+  // switch (key) {
+  //   case value:
+
+  //     break;
+
+  //   default:
+  //     break;
+  // }
 
   render () {
     const doneCount = this.state.todoData
       .filter((item) => item.done).length;
     const todoCount = this.state.todoData.length - doneCount;
-    const visbleItems = this.Search(this.state.todoData, this.state.term);
+    const visbleItems = this.Search(this.state.todoData,
+      this.state.term, this.state.filter);
 
     return (
       <div className="todo-app">
         <AppHeader toDo={todoCount} done={doneCount} />
         <div className="top-panel d-flex">
           <SearchPanel onSearch={this.onSearch} />
-          <ItemStatusFilter onSearch={this.onSearch}/>
+          <ItemStatusFilter onSearch={this.onSearch} />
         </div>
 
         <TodoList

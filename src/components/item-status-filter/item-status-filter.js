@@ -16,19 +16,26 @@ class ItemStatusFilter extends React.Component {
       this.setState(({ btns }) => {
         const newArray = btns.map((item) => {
           if (item.id === id) {
-            item.activ = true;
+            // item.activ = true;
+            const newItem = { ...item, activ: true };
+            return newItem;
           } else {
-            item.activ = false;
+            // item.activ = false;
+            const newItem = { ...item, activ: false };
+            return newItem;
           }
-          return item;
         });
         return {
           btns: newArray
         };
       });
-      this.props.onSearch(null, 'test');
-     
-      
+      this.setState((state) => {
+        console.log(state.btns);
+        this.props.onSearch(null, state.btns);
+      });
+
+      // console.log(this.state.btns
+      //   .filter((item) => item.activ));
     };
     this.isActive = (status) => {
       if (status) {
